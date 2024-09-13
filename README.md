@@ -24,8 +24,8 @@ To use the utility, run it from the command line by specifying the template file
 ```
 fenv <env_dir> <stages>
 ```
-- env_dir: Path to the env dir (e.g., env).
-- stages: The environment stage, separate by comma (e.g. dev,testing,staging).
+- env_dir: Path to the env dir (e.g., `env/`).
+- stages: The environment stage, separate by comma (e.g. `dev,testing,staging`).
 
 # Template Syntax
 The template file should use Go’s text/template syntax. For example:
