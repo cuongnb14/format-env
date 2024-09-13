@@ -56,7 +56,7 @@ func readConfigFile(filePath string) (map[string]string, error) {
 
 // formatEnv generates a formatted .env file using a template
 func formatEnv(envDir string, stage string) error {
-	log.Printf("format env for stage %s using template %s", stage, envDir)
+	log.Printf("format env for stage %s using template %s/template.env", stage, envDir)
 
 	configPath := fmt.Sprintf("%s/%s.env", envDir, stage)
 	outputPath := configPath
