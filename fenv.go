@@ -9,6 +9,16 @@ import (
 	"text/template"
 )
 
+func defaultFunc(value, fallback any) string {
+	if value == nil {
+		return fallback.(string)
+	}
+	if value == "" {
+		return fallback.(string)
+	}
+	return value.(string)
+}
+
 // readConfigFile reads the key-value pairs from a .env file
 func readConfigFile(filePath string) (map[string]string, error) {
 	config := make(map[string]string)
@@ -45,13 +55,13 @@ func readConfigFile(filePath string) (map[string]string, error) {
 }
 
 // formatEnv generates a formatted .env file using a template
-func formatEnv(templatePath string, stage string) error {
-	log.Printf("format env for stage %s using template %s", stage, templatePath)
+func formatEnv(envDir string, stage string) error {
+	log.Printf("format env for stage %s using template %s", stage, envDir)
 
-	configPath := fmt.Sprintf("%s/%s.env", templatePath, stage)
+	configPath := fmt.Sprintf("%s/%s.env", envDir, stage)
 	outputPath := configPath
 
-	templateContent, err := os.ReadFile(templatePath + "/template.env")
+	templateContent, err := os.ReadFile(envDir + "/template.env")
 	if err != nil {
 		return fmt.Errorf("failed to read template file: %v", err)
 	}
@@ -61,10 +71,9 @@ func formatEnv(templatePath string, stage string) error {
 		return fmt.Errorf("failed to read config file: %v", err)
 	}
 
-	tmpl, err := template.New("env").Parse(string(templateContent))
-	if err != nil {
-		return fmt.Errorf("failed to parse template: %v", err)
-	}
+	tmpl := template.Must(template.New("env").Funcs(template.FuncMap{
+		"df": defaultFunc,
+	}).Parse(string(templateContent)))
 
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
@@ -80,36 +89,19 @@ func formatEnv(templatePath string, stage string) error {
 	return nil
 }
 
-// FormatEnv handles multiple stages and template path
-func FormatEnv(templatePath string, stage string) error {
-	stages := []string{"dev", "testing", "unstable", "staging"}
-	if stage == "all" {
-		for _, s := range stages {
-			err := formatEnv(templatePath, s)
-			if err != nil {
-				log.Printf("failed to format env for stage %s: %v", s, err)
-			}
-		}
-	} else {
-		err := formatEnv(templatePath, stage)
-		if err != nil {
-			log.Printf("failed to format env for stage %s: %v", stage, err)
-		}
-	}
-	return nil
-}
-
 func main() {
 	if len(os.Args) < 3 {
-		log.Println("Usage: format_env <template_path> <stage>")
+		log.Println("Usage: format_env <env_dir> <stage>")
 		return
 	}
 
-	templatePath := os.Args[1]
-	stage := os.Args[2]
-
-	err := FormatEnv(templatePath, stage)
-	if err != nil {
-		log.Fatalf("Error formatting env: %v", err)
+	envDir := os.Args[1]
+	stageStr := os.Args[2]
+	result := strings.Split(stageStr, ",")
+	for _, v := range result {
+		err := formatEnv(envDir, v)
+		if err != nil {
+			log.Fatalf("Error formatting env: %v", err)
+		}
 	}
 }
