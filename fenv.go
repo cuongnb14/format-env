@@ -91,7 +91,7 @@ func formatEnv(envDir string, stage string) error {
 
 func main() {
 	if len(os.Args) < 3 {
-		log.Println("Usage: format_env <env_dir> <stage>")
+		log.Println("Usage: fenv <env_dir> <stages>")
 		return
 	}
 
