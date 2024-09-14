@@ -36,6 +36,17 @@ fenv <env_dir> <stages>
 - env_dir: Path to the env dir (e.g., `env/`). The template file name `_template.env` must have in this folder
 - stages: The environment stage, separate by comma (e.g. `dev,testing,staging`).
 
+Example
+```
+| env
+|--- _template.env
+|--- dev.env
+|--- staging.env
+|--- prod.env
+
+# run format
+fenv env/ dev,staging,prod
+```
 # Template Syntax
 The template file should use Go’s text/template syntax. For example:
 ```
