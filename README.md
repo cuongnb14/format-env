@@ -24,7 +24,7 @@ To use the utility, run it from the command line by specifying the template file
 ```
 fenv <env_dir> <stages>
 ```
-- env_dir: Path to the env dir (e.g., `env/`).
+- env_dir: Path to the env dir (e.g., `env/`). The template file name `template.env` must have in this folder
 - stages: The environment stage, separate by comma (e.g. `dev,testing,staging`).
 
 # Template Syntax
