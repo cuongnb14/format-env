@@ -23,7 +23,7 @@ func defaultFunc(value, fallback any) string {
 func readConfigFile(filePath string) (map[string]string, error) {
 	config := make(map[string]string)
 
-	file, err := os.Open(filePath)
+	file, err := os.OpenFile(filePath, os.O_CREATE, 0644)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func readConfigFile(filePath string) (map[string]string, error) {
 
 // formatEnv generates a formatted .env file using a template
 func formatEnv(envDir string, stage string) error {
-	log.Printf("format env for stage %s using template %s/template.env", stage, envDir)
+	log.Printf("using template %s/template.env format %s/%s.env", envDir, envDir, stage)
 
 	configPath := fmt.Sprintf("%s/%s.env", envDir, stage)
 	outputPath := configPath
@@ -71,7 +71,7 @@ func formatEnv(envDir string, stage string) error {
 		return fmt.Errorf("failed to read config file: %v", err)
 	}
 
-	tmpl := template.Must(template.New("env").Funcs(template.FuncMap{
+	tmpl := template.Must(template.New("env").Option("missingkey=zero").Funcs(template.FuncMap{
 		"df": defaultFunc,
 	}).Parse(string(templateContent)))
 
