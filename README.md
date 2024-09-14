@@ -1,4 +1,4 @@
-# format env
+# Format env
 format-env is a Go command-line utility to generate and format environment files (.env) using a template. This tool allows you to specify the environment (e.g., dev, testing, staging, etc.) and a template file to generate the corresponding environment configuration file.
 
 # Features
@@ -8,14 +8,15 @@ format-env is a Go command-line utility to generate and format environment files
 - Allows specifying the template path and stage dynamically through command-line arguments.
 
 # Installation
-## Donwload binary file
-```
+## Option 1: Donwload binary file
+```sh
+# for macos arm64 
 wget https://github.com/cuongnb14/format-env/releases/download/v1.0.1/fenv_darwin_arm64 -O fenv
 sudo mv fenv /usr/local/bin/
 sudo chmod +x /usr/local/bin/fenv
 ```
 
-## Compile from source
+## Option 2: Compile from source
 To build and install the utility, make sure you have Go installed, and then run:
 ```
 go build -o fenv fenv.go
