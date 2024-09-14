@@ -50,7 +50,22 @@ fenv env/ dev,staging,prod
 # Template Syntax
 The template file should use Go’s text/template syntax. For example:
 ```
+# General
+# =======================================================================
+STAGE={{ .STAGE }}
+PORT={{ df .PORT "8000" }}
+
+# Database
+# =======================================================================
+DB_HOST={{ .DB_HOST }}
+DB_PORT={{ .DB_PORT }}
+DB_USER={{ .DB_USER }}
+DB_PASS={{ .DB_PASS }}
+DB_NAME={{ df .DB_NAME "example" }}
+
+# Redis
+# =======================================================================
 REDIS_ENABLE_SSL={{ df .REDIS_ENABLE_SSL "false" }}
-DATABASE_URL={{ .DATABASE_URL }}
+REDIS_URL={{ .REDIS_URL }}
 ```
-This template will render the environment variable REDIS_ENABLE_SSL and use a default value "false" if it is not provided.
+Note: This template will render the environment variable `REDIS_ENABLE_SSL` and use a default value `false` if it is not provided.
